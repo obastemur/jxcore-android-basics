@@ -24,3 +24,7 @@ jxcore-droid/libs/armeabi-v7a/gdbserver
 jxcore-droid/libs/armeabi/gdbserver
 
 jxcore-droid/libs/x86/gdbserver
+
+jxcore-droid/bin/R.txt
+
+*.cache

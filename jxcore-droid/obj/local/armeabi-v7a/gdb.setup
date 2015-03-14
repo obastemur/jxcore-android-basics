@@ -1,0 +1,5 @@
+set solib-search-path ./obj/local/armeabi-v7a
+source /Users/Gonzo/sdk/android-ndk/prebuilt/common/gdb/common.setup
+directory /Users/Gonzo/sdk/android-ndk/platforms/android-9/arch-arm/usr/include jni /Users/Gonzo/sdk/android-ndk/sources/cxx-stl/gnu-libstdc++ /Users/Gonzo/Github/jxcore/out_android/android/bin/ /Users/Gonzo/sdk/android-ndk/sources/cxx-stl/gnu-libstdc++/4.8/include /Users/Gonzo/sdk/android-ndk/sources/cxx-stl/gnu-libstdc++/4.8/libs/armeabi-v7a/include /Users/Gonzo/sdk/android-ndk/sources/cxx-stl/gnu-libstdc++/4.8/include/backward
+file ./obj/local/armeabi-v7a/app_process
+target remote :5039

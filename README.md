@@ -3,6 +3,9 @@
 This project is a kind of 'hello world' for JXcore's native interface on an Android application. 
 It's an Eclipse IDE project. You also need Android-NDK is installed on your system.
 
+The sample project use JXcore SpiderMonkey JIT build for Android ARM and Intel processors.  
+Prebuilt JXcore binaries are already available under 'jxcore-droid/jxcore-binaries'
+
 ### Before Start
 [How to setup Android NDK for Eclipse IDE](http://tools.android.com/recent/usingthendkplugin)  
 [Download Android NDK](https://developer.android.com/tools/sdk/ndk/index.html)  

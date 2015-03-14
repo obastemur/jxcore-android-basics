@@ -22,6 +22,10 @@ After all, you should have two eclipse projects on 'Project Explorer'.
 One of them is an Android support project. The other one is JXcore sample
 project. Make sure you have both of them on Eclipse. 
 
+Right click to 'jxcore-droid' project -> Android Tools -> Add Support Library .. and follow the steps.
+
+If you have errors etc. (from top menu) Project -> Clean -> (Select both of the projects)
+
 Right click to 'android-support-v7...' project and 'Build'. 
 
 You may need to update some project settings for your environment. Feel free to ask from Github!

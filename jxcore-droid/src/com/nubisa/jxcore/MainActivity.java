@@ -2,6 +2,10 @@
 
 package com.nubisa.jxcore;
 
+import java.util.Enumeration;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -93,9 +97,35 @@ public class MainActivity extends FragmentActivity {
     // we could proxy it by request (over NDK) but NDK doesn't support reading
     // directory names.
     // we do not read the file contents here. just the name tree.
-    String json = "{" + FileManager.GetFileNames("jxcore", "/") + "}";
+    // assets.list is terribly slow, below trick is literally 100 times faster
+    StringBuilder assets = new StringBuilder();
+    assets.append("{");
+    boolean first_entry = true;
+    try {
+      ZipFile zf = new ZipFile(
+          AppManager.currentContext.getApplicationInfo().sourceDir);
+      try {
+        for (Enumeration<? extends ZipEntry> e = zf.entries(); e
+            .hasMoreElements();) {
+          ZipEntry ze = e.nextElement();
+          String name = ze.getName();
+          if (name.startsWith("assets/jxcore/")) {
+            if (first_entry)
+              first_entry = false;
+            else
+              assets.append(",");
+            int size = FileManager.aproxFileSize(name.substring(7));
+            assets.append("\"" + name.substring(14) + "\":" + size);
+          }
+        }
+      } finally {
+        zf.close();
+      }
+    } catch (Exception e) {
+    }
+    assets.append("}");
 
-    prepareEngine(home, json);
+    prepareEngine(home, assets.toString());
 
     String mainFile = FileManager.readFile("main.js");
     String data = "process.cwd = function(){ return '" + home + "';};\n"

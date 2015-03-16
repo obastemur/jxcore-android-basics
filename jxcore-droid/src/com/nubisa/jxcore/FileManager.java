@@ -6,8 +6,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
 
 import android.annotation.SuppressLint;
 import android.content.res.AssetManager;
@@ -43,50 +41,61 @@ public class FileManager {
     return sb.toString();
   }
 
+  public static int aproxFileSize(String location) {
+    int size = 0;
+    try {
+      AssetManager asm = AppManager.currentContext.getAssets();
+      InputStream st = asm.open(location, AssetManager.ACCESS_UNKNOWN);
+      size = st.available();
+      st.close();
+    } catch (IOException e) {
+      Log.w("jxcore-FileManager", "aproxFileSize failed");
+      e.printStackTrace();
+      return 0;
+    }
+
+    return size;
+  }
+
   public class FILE_OPS {
     public static final int assets = 0;
   }
 
+  // do not use this, it's terribly slow (assets.list())
   public static String GetFileNames(String location, String self) {
     StringBuilder sb = new StringBuilder();
     AssetManager amg = AppManager.currentContext.getAssets();
     sb.append("\"" + self + "\":");
     String[] lst = null;
-    boolean has = false;
     try {
       lst = amg.list(location);
       for (int i = 0; i < lst.length; i++) {
+        boolean is_dir = false;
+        long size = 0;
+        try {
+          InputStream st = amg.open(location + "/" + lst[i],
+              AssetManager.ACCESS_UNKNOWN);
+
+          size = st.available();
+          st.close();
+        } catch (Exception e) {
+          is_dir = true;
+        }
+
         if (i != 0)
           sb.append(",");
         else
           sb.append("{");
-        sb.append(GetFileNames(location + "/" + lst[i], lst[i]));
-        has = true;
+
+        if (is_dir) {
+          sb.append(GetFileNames(location + "/" + lst[i], lst[i]));
+        } else
+          sb.append("\"" + lst[i] + "\":{\"!s\":" + size + "}");
       }
     } catch (Exception e) {
     }
-    if (!has) {
-      sb.append("{\"f\":0, \"s\":");
-      boolean is_open = false;
-      InputStream afd = null;
-      try {
-        afd = amg.open(location);
-        is_open = true;
-      } catch (Exception e) {
-      }
-      if (is_open) {
-        long sz = 1;
-        try {
-          sz = afd.available();
-          afd.close();
-        } catch (Exception e) {
-        }
-        sb.append(sz);
-      } else
-        sb.append("0");
-      sb.append("}");
-    } else
-      sb.append(",\"f\":1}");
+
+    sb.append("}");
 
     return sb.toString();
   }

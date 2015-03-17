@@ -29,3 +29,16 @@ If you have errors etc. (from top menu) Project -> Clean -> (Select both of the 
 Right click to 'android-support-v7...' project and 'Build'. 
 
 You may need to update some project settings for your environment. Feel free to ask from Github!
+
+For those using Intellij 14 you can import the project by:
+
+1. File->Import Project
+2. Select jxcore-android-basics/jxcore-droid and hit o.k.
+3. Select 'Create project from existing sources' in the Import Project dialog and hit next
+4. Hit next 4 more times
+5. When you get to 'Please select project SDK' select Android API 21 Platform and hit next
+6. Hit finish
+7. Open in New Window
+8. Hit 'OK' when asked about Import Android Dependencies From Property Files
+
+The end result is that Intellij will automatically import both jxcore-droid as well as appcompat_v7.

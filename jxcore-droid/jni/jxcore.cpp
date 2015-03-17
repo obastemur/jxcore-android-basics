@@ -11,7 +11,6 @@
 #include "android/asset_manager_jni.h"
 
 void ConvertResult(JXResult *result, std::string &to_result) {
-
   switch (result->type_) {
     case RT_Null:
       to_result = "null";

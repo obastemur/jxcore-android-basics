@@ -10,7 +10,7 @@
 #include "android/asset_manager.h"
 #include "android/asset_manager_jni.h"
 
-void ConvertResult(JXResult *result, std::string &to_result) {
+void ConvertResult(JXValue *result, std::string &to_result) {
   switch (result->type_) {
     case RT_Null:
       to_result = "null";
@@ -52,8 +52,8 @@ void ConvertResult(JXResult *result, std::string &to_result) {
   }
 }
 
-static void callback(JXResult *results, int argc) {
-  JXResult retval = results[0];
+static void callback(JXValue *results, int argc) {
+  JXValue retval = results[0];
 
   std::string str;
   ConvertResult(&retval, str);
@@ -62,7 +62,7 @@ static void callback(JXResult *results, int argc) {
 }
 
 AAssetManager *assetManager;
-static void assetExistsSync(JXResult *results, int argc) {
+static void assetExistsSync(JXValue *results, int argc) {
   const char *filename = JX_GetString(&results[0]);
   bool found = false;
   AAsset *asset =
@@ -75,7 +75,7 @@ static void assetExistsSync(JXResult *results, int argc) {
   JX_SetBoolean(&results[argc], found);
 }
 
-static void assetReadSync(JXResult *results, int argc) {
+static void assetReadSync(JXValue *results, int argc) {
   const char *filename = JX_GetString(&results[0]);
 
   AAsset *asset =
@@ -94,7 +94,7 @@ static void assetReadSync(JXResult *results, int argc) {
 }
 
 std::string files_json;
-static void assetReadDirSync(JXResult *results, int argc) {
+static void assetReadDirSync(JXValue *results, int argc) {
   JX_SetJSON(&results[argc], files_json.c_str(), files_json.length());
 }
 
@@ -131,12 +131,12 @@ Java_com_nubisa_jxcore_MainActivity_evalEngine(JNIEnv *env, jobject thiz,
                                                jstring contents) {
   const char *data = env->GetStringUTFChars(contents, 0);
 
-  JXResult jxresult;
+  JXValue jxresult;
   JX_Evaluate(data, 0, &jxresult);
   std::string str_result;
   ConvertResult(&jxresult, str_result);
 
-  JX_FreeResultData(&jxresult);
+  JX_Free(&jxresult);
   env->ReleaseStringUTFChars(contents, data);
 
   return env->NewStringUTF(str_result.c_str());

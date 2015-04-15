@@ -18,9 +18,13 @@ hs_err_pid*
 *.so
 *.setup
 
-jxcore-droid/libs/armeabi-v7a/gdbserver
-jxcore-droid/libs/armeabi/gdbserver
-jxcore-droid/libs/x86/gdbserver
+.gradle
+/jxcore-droid-astd/local.properties
+/jxcore-droid-astd/.idea/workspace.xml
+/jxcore-droid-astd/.idea/libraries
+.DS_Store
+/jxcore-droid-astd/build
+
 bin/
 gen/
 *.cache

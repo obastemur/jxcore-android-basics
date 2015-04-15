@@ -18,3 +18,7 @@ Prebuilt JXcore binaries are already available under the project folders.
 5 - Sync Gradle build etc. [see howto](http://stackoverflow.com/a/24824736)  
 6 - You are all set. Run!  
 
+### Editing Application
+First install js/css Android Studio support from [this repo](https://github.com/manifestinteractive/android-studio-filetypes)
+
+Browse app > src > main > assets

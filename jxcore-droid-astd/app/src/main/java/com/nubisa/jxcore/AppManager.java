@@ -5,6 +5,6 @@ package com.nubisa.jxcore;
 import android.content.Context;
 
 public class AppManager {
-  public static MainActivity currentActivity;
-  public static Context currentContext;
+    public static MainActivity currentActivity;
+    public static Context currentContext;
 }

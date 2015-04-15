@@ -103,7 +103,7 @@ extern "C" {
 jint JNI_OnLoad(JavaVM *vm, void *reserved) { return jxcore::Initialize(vm); }
 
 JNIEXPORT void JNICALL
-Java_com_nubisa_jxcore_MainActivity_prepareEngine(JNIEnv *env, jobject thiz,
+Java_com_nubisa_jxcore_jxcore_prepareEngine(JNIEnv *env, jobject thiz,
                                                   jstring home, jstring files) {
   static bool initialized = false;
 
@@ -127,7 +127,7 @@ Java_com_nubisa_jxcore_MainActivity_prepareEngine(JNIEnv *env, jobject thiz,
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_nubisa_jxcore_MainActivity_evalEngine(JNIEnv *env, jobject thiz,
+Java_com_nubisa_jxcore_jxcore_evalEngine(JNIEnv *env, jobject thiz,
                                                jstring contents) {
   const char *data = env->GetStringUTFChars(contents, 0);
 
@@ -143,7 +143,7 @@ Java_com_nubisa_jxcore_MainActivity_evalEngine(JNIEnv *env, jobject thiz,
 }
 
 JNIEXPORT void JNICALL
-Java_com_nubisa_jxcore_MainActivity_defineMainFile(JNIEnv *env, jobject obj,
+Java_com_nubisa_jxcore_jxcore_defineMainFile(JNIEnv *env, jobject obj,
                                                    jstring contents) {
   const char *data = env->GetStringUTFChars(contents, 0);
   JX_DefineMainFile(data);
@@ -151,7 +151,7 @@ Java_com_nubisa_jxcore_MainActivity_defineMainFile(JNIEnv *env, jobject obj,
 }
 
 JNIEXPORT void JNICALL
-Java_com_nubisa_jxcore_MainActivity_defineFile(JNIEnv *env, jobject obj,
+Java_com_nubisa_jxcore_jxcore_defineFile(JNIEnv *env, jobject obj,
                                                jstring filename, jstring data) {
   const char *name = env->GetStringUTFChars(filename, 0);
   const char *file = env->GetStringUTFChars(data, 0);
@@ -163,22 +163,22 @@ Java_com_nubisa_jxcore_MainActivity_defineFile(JNIEnv *env, jobject obj,
 }
 
 JNIEXPORT void JNICALL
-Java_com_nubisa_jxcore_MainActivity_startEngine(JNIEnv *env, jobject thiz) {
+Java_com_nubisa_jxcore_jxcore_startEngine(JNIEnv *env, jobject thiz) {
   JX_StartEngine();
 }
 
 JNIEXPORT jint JNICALL
-Java_com_nubisa_jxcore_MainActivity_loopOnce(JNIEnv *env, jobject thiz) {
+Java_com_nubisa_jxcore_jxcore_loopOnce(JNIEnv *env, jobject thiz) {
   return JX_LoopOnce();
 }
 
 JNIEXPORT void JNICALL
-Java_com_nubisa_jxcore_MainActivity_stopEngine(JNIEnv *env, jobject thiz) {
+Java_com_nubisa_jxcore_jxcore_stopEngine(JNIEnv *env, jobject thiz) {
   JX_StopEngine();
 }
 
 JNIEXPORT void JNICALL
-Java_com_nubisa_jxcore_MainActivity_setNativeContext(JNIEnv *env, jobject thiz,
+Java_com_nubisa_jxcore_jxcore_setNativeContext(JNIEnv *env, jobject thiz,
                                                      jobject context,
                                                      jobject j_assetManager) {
   jxcore::JniHelper::setClassLoaderFrom(context);

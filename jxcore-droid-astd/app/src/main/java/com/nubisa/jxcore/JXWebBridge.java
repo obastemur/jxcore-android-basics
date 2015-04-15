@@ -8,43 +8,38 @@ import android.webkit.JavascriptInterface;
 
 public class JXWebBridge {
 
-  public String cbName = "null";
-  public JXWebView view = null;
+    public String cbName = "null";
+    public JXWebView view = null;
 
-  static long callId;
-  static {
-    callId = 0;
-  }
+    static long callId;
 
-  @JavascriptInterface
-  public long uniqueId() {
-    long id = ++callId;
-    if (id >= Long.MAX_VALUE) {
-      id = 1;
-      callId = 0;
+    static {
+        callId = 0;
     }
 
-    return id; // id shouldn't be 0! (JS side ! check)
-  }
+    @JavascriptInterface
+    public long uniqueId() {
+        long id = ++callId;
+        if (id >= Long.MAX_VALUE) {
+            id = 1;
+            callId = 0;
+        }
 
-  @JavascriptInterface
-  public String call(final String json) {
-    AppManager.currentActivity.runOnUiThread(new Runnable() {
-      @Override
-      public void run() {
-        AppManager.currentActivity.evalEngine(json);
-      }
-    });
-    return "";
-  }
+        return id; // id shouldn't be 0! (JS side ! check)
+    }
 
-  public static ArrayList<String> callbacks = new ArrayList<String>();
+    @JavascriptInterface
+    public void call(final String json) {
+        AppManager.currentActivity.jx_instructions.add(json);
+    }
 
-  @JavascriptInterface
-  public String getCallback() {
-    if (callbacks.size() > 0)
-      return callbacks.remove(0);
-    else
-      return null;
-  }
+    public static ArrayList<String> callbacks = new ArrayList<String>();
+
+    @JavascriptInterface
+    public String getCallback() {
+        if (callbacks.size() > 0)
+            return callbacks.remove(0);
+        else
+            return null;
+    }
 }

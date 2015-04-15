@@ -16,16 +16,15 @@
         jx_utils.callbacks.length--;     
       }
     };
+
     function jxcore(x) { if (!(this instanceof jxcore)) { return new jxcore(x); } this.name = x; }    
     jxcore.prototype.call = function() {
       var params = [];
       var ln = arguments.length;
       params.push(this.name);
-      for (var i=0; i<ln; i++)
-      {
+      for (var i=0; i<ln; i++) {
         var param = arguments[i];
-        if (jx_utils.isFunction(param))
-        {
+        if (jx_utils.isFunction(param)) {
           var id = _jxcore_.uniqueId();
           jx_utils.callbacks[id] = param;
           jx_utils.callbacks.length++;
@@ -49,9 +48,21 @@
   var txt = document.getElementById('txt');
   function log(x, nobr){ if(!nobr) txt.innerHTML += "<BR/>"; else txt.innerHTML = ""; txt.innerHTML += x; }
         
-  var start = Date.now();
-  jxcore("concat").call("A", "B", function(result){  
-    log("result :" + result + " " + (Date.now() - start), true);
-  });
+  var start = Date.now(), end;
+  function makeCall(cb) {
+    var cc = jxcore("concat");
+    start = Date.now();
+    cc.call("A", "B", cb);
+    end = Date.now() - start;
+  }
+
+  var fnc = function(result){
+    log("Thread spent :" + result + " ms. Call cost " + end + " ms", true);
+    setTimeout(function() {
+      makeCall(fnc);
+    }, 100);
+  };
+
+  fnc(0);
 </script>
 </html>

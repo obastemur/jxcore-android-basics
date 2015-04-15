@@ -20,8 +20,19 @@ var obj = {
   a: 1,
   b: 2
 };
+
 console.log("from node module:", jsnice(obj));
 
 exports.concat = function(a, b, cb) {
-  cb(a + b);
+  jxcore.tasks.addTask(function(){
+    var start = process.hrtime();
+    var q = 0;
+    for (var i=0; i<1e5; i++) {
+      q += i%2;
+      q %= 100;
+    }
+    return process.hrtime(start)[1] / 1000000;
+  }, null, function(res) {
+    cb(res);
+  });
 };

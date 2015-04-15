@@ -24,7 +24,4 @@ hs_err_pid*
 /jxcore-droid-astd/.idea/libraries
 .DS_Store
 /jxcore-droid-astd/build
-
-bin/
-gen/
-*.cache
+jxcore-droid-astd/app/build/

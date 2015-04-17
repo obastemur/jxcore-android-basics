@@ -2,18 +2,12 @@ package com.nubisa.jxcore;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.os.Handler;
 
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-/**
- * Created by Gonzo on 4/15/15.
- */
 public class jxcore {
-
-    private Handler handler = null;
 
     static {
         System.loadLibrary("jxcore");

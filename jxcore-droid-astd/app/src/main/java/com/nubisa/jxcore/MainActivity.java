@@ -18,7 +18,43 @@ import java.util.List;
 
 public class MainActivity extends FragmentActivity {
 
-    public static void callback(String json) throws Exception {
+    public static void callback(long id) throws Exception {
+        jxcore.JXType tp = jxcore.JXType.fromInt(AppManager.currentActivity.jx_handler.getType(id));
+
+        String json = "";
+        switch(tp) {
+            case RT_Int32:
+                json += AppManager.currentActivity.jx_handler.getInt32(id);
+                break;
+            case RT_Double:
+                json += AppManager.currentActivity.jx_handler.getDouble(id);
+                break;
+            case RT_Boolean:
+                json += AppManager.currentActivity.jx_handler.getBoolean(id) == 1;
+                break;
+            case RT_String:
+                json += AppManager.currentActivity.jx_handler.getString(id);
+                break;
+            case RT_JSON:
+                json += AppManager.currentActivity.jx_handler.getString(id);
+                break;
+            case RT_Buffer:
+                json += AppManager.currentActivity.jx_handler.getString(id);
+                break;
+            case RT_Undefined:
+                json += "undefined";
+                break;
+            case RT_Null:
+                json += "null";
+                break;
+            case RT_Error:
+                json += AppManager.currentActivity.jx_handler.getString(id);
+                break;
+            default:
+                json += AppManager.currentActivity.jx_handler.convertToString(id);
+
+        }
+
         JXWebBridge.callbacks.add(json);
         AppManager.currentActivity.runOnUiThread(new Runnable() {
             @Override
@@ -95,7 +131,12 @@ public class MainActivity extends FragmentActivity {
                     }
                     while (!jx_instructions.isEmpty()) {
                         String json = (String) jx_instructions.remove(0);
-                        jx_handler.evalEngine(json);
+                        long x = jx_handler.evalEngine(json);
+                        if (x!=-2) {
+                            String result = jx_handler.convertToString(x);
+                            // unexpected return, is that an exception ?
+                            Log.e("JXcore", result);
+                        }
                         jx_handler.loopOnce();
                     }
                 }

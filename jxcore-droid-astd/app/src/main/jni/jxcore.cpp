@@ -52,13 +52,13 @@ void ConvertResult(JXValue *result, std::string &to_result) {
   }
 }
 
+static JXValue *cb_value = NULL;
 static void callback(JXValue *results, int argc) {
-  JXValue retval = results[0];
+  cb_value = results+0;
 
-  std::string str;
-  ConvertResult(&retval, str);
+  jxcore::Callback(-1);
 
-  jxcore::Callback(str.c_str());
+  cb_value = NULL;
 }
 
 AAssetManager *assetManager;
@@ -126,21 +126,85 @@ Java_com_nubisa_jxcore_jxcore_prepareEngine(JNIEnv *env, jobject thiz,
   JX_DefineExtension("assetReadDirSync", assetReadDirSync);
 }
 
-JNIEXPORT jstring JNICALL
+JNIEXPORT jlong JNICALL
 Java_com_nubisa_jxcore_jxcore_evalEngine(JNIEnv *env, jobject thiz,
                                                jstring contents) {
   const char *data = env->GetStringUTFChars(contents, 0);
 
-  JXValue jxresult;
-  JX_Evaluate(data, 0, &jxresult);
-  std::string str_result;
-  ConvertResult(&jxresult, str_result);
+  JXValue result;
+  JX_Evaluate(data, 0, &result);
 
-  JX_Free(&jxresult);
-  env->ReleaseStringUTFChars(contents, data);
+  if (!JX_IsNull(&result) && !JX_IsUndefined(&result))
+    return JX_StoreValue(&result);
+  else
+    return -2;
+}
+
+JNIEXPORT jstring JNICALL
+Java_com_nubisa_jxcore_jxcore_convertToString(JNIEnv *env, jobject thiz, jlong id) {
+  JXValue *val = JX_RemoveStoredValue(0, id);
+  std::string str_result;
+  ConvertResult(val, str_result);
+  JX_Free(val);
+  return env->NewStringUTF(str_result.c_str());
+}
+
+JNIEXPORT jint JNICALL
+Java_com_nubisa_jxcore_jxcore_getType(JNIEnv *env, jobject thiz, jlong id) {
+  if (id == -1)
+    return cb_value->type_;
+
+  return JX_GetStoredValueType(0, id);
+}
+
+JNIEXPORT jint JNICALL
+Java_com_nubisa_jxcore_jxcore_getInt32(JNIEnv *env, jobject thiz, jlong id) {
+  if (id == -1)
+    return JX_GetInt32(cb_value);
+
+  JXValue *val = JX_RemoveStoredValue(0, id);
+  int n = JX_GetInt32(val);
+  JX_Free(val);
+  return n;
+}
+
+JNIEXPORT jdouble JNICALL
+Java_com_nubisa_jxcore_jxcore_getDouble(JNIEnv *env, jobject thiz, jlong id) {
+  if (id == -1)
+    return JX_GetDouble(cb_value);
+
+  JXValue *val = JX_RemoveStoredValue(0, id);
+  int n = JX_GetDouble(val);
+  JX_Free(val);
+  return n;
+}
+
+JNIEXPORT jint JNICALL
+Java_com_nubisa_jxcore_jxcore_getBoolean(JNIEnv *env, jobject thiz, jlong id) {
+  if (id == -1)
+    return JX_GetBoolean(cb_value) ? 1 : 0;
+
+  JXValue *val = JX_RemoveStoredValue(0, id);
+  int n = JX_GetBoolean(val) ? 1 : 0;
+  JX_Free(val);
+  return n;
+}
+
+JNIEXPORT jstring JNICALL
+Java_com_nubisa_jxcore_jxcore_getString(JNIEnv *env, jobject thiz, jlong id) {
+  JXValue *val;
+  if (id == -1)
+    val = cb_value;
+  else
+    val = JX_RemoveStoredValue(0, id);
+
+  std::string str_result = JX_GetString(val);
+  if (id != -1)
+    JX_Free(val);
 
   return env->NewStringUTF(str_result.c_str());
 }
+
 
 JNIEXPORT void JNICALL
 Java_com_nubisa_jxcore_jxcore_defineMainFile(JNIEnv *env, jobject obj,

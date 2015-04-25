@@ -16,14 +16,14 @@
 
 namespace jxcore {
 
-void Callback(const char *json) {
+void Callback(long id) {
   JniMethodInfo t;
   if (JniHelper::getStaticMethodInfo(t, "com/nubisa/jxcore/MainActivity",
-                                     "callback", "(Ljava/lang/String;)V")) {
-    jstring strX = t.env->NewStringUTF(json);
-    t.env->CallStaticVoidMethod(t.classID, t.methodID, strX);
+                                     "callback", "(J)V")) {
+    jvalue jv;
+    jv.j = id;
+    t.env->CallStaticVoidMethod(t.classID, t.methodID, jv);
     t.env->DeleteLocalRef(t.classID);
-    t.env->DeleteLocalRef(strX);
   }
 }
 

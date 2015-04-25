@@ -13,6 +13,51 @@ public class jxcore {
         System.loadLibrary("jxcore");
     }
 
+    public enum JXType {
+        RT_Int32(1),
+        RT_Double(2),
+        RT_Boolean(3),
+        RT_String(4),
+        RT_JSON(5),
+        RT_Buffer(6),
+        RT_Undefined(7),
+        RT_Null(8),
+        RT_Error(9),
+        RT_Function(10),
+        RT_Object(11),
+        RT_Unsupported(12);
+
+        int val;
+        private JXType(int n) {
+          val = n;
+        }
+
+        public static JXType fromInt(int n) {
+            switch(n) {
+                case 1:
+                  return RT_Int32;
+                case 2:
+                    return RT_Double;
+                case 3:
+                    return RT_Boolean;
+                case 4:
+                    return RT_String;
+                case 5:
+                    return RT_JSON;
+                case 6:
+                    return RT_Buffer;
+                case 7:
+                    return RT_Undefined;
+                case 8:
+                    return RT_Null;
+                case 9:
+                    return RT_Error;
+                default:
+                    return RT_Unsupported;
+            }
+        }
+    }
+
     public native void setNativeContext(final Context context,
                                         final AssetManager assetManager);
 
@@ -26,7 +71,19 @@ public class jxcore {
 
     public native void defineMainFile(String content);
 
-    public native String evalEngine(String script);
+    public native long evalEngine(String script);
+
+    public native int getType(long id);
+
+    public native double getDouble(long id);
+
+    public native String getString(long id);
+
+    public native int getInt32(long id);
+
+    public native int getBoolean(long id);
+
+    public native String convertToString(long id);
 
 
     public void Initialize(String home) {
